@@ -1,0 +1,19 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Inter, Arm;
+}
+
+@font-face {
+  font-family: Inter;
+  src: url("fonts/Inter-VariableFont_opsz,wght.ttf") format('truetype');
+}
+
+@font-face {
+  font-family: Arm;
+  src: url("fonts/NotoSansArmenian-Regular.ttf") format('truetype')
+} 
+
+
+
