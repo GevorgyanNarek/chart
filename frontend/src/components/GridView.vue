@@ -28,7 +28,7 @@ const curveStore = useCurveStore()
 .gridView {
     width: 100%;
     height: 100%;
-    padding: 3vh 0;
+    /* padding: 3vh 0; */
     overflow: auto;
 }
 

@@ -141,18 +141,19 @@ onMounted(() => {
 <style scoped>
 .board {
   width: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 5vh 0;
+  justify-content: center;
   position: relative;
 }
 
 /* ---------------- HEADER ------------------  */
 
 header {
-  width: 70%;
-  height: 100%;
+  width: 98%;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -293,8 +294,8 @@ header {
 
 /* ---------------- MAIN ------------------  */
 main {
-  width: 70%;
-  height: 75vh;
+  width: 98%;
+  height: 60%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -303,7 +304,7 @@ main {
 
 /* --------------- FOOTER ------------------- */
 footer {
-  width: 70%;
+  width: 98%;
   padding: 5vh 0;
   display: flex;
   flex-direction: column;
@@ -347,22 +348,8 @@ footer h3 {
   object-fit: contain;
 }
 
-@media screen and (max-width: 1200px) {
-  header,
-  main,
-  footer {
-    width: 90%;
-  }
-}
-
 
 @media screen and (max-width: 900px) {
-  header,
-  main,
-  footer {
-    width: 95%;
-  }
-
   .header_menu {
     flex-direction: column;
     gap: 20px;

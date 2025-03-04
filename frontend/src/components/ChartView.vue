@@ -353,6 +353,10 @@ function hexToRGBA(hex, alpha = 0.5) {
     border: 1px solid green;
 }
 
+canvas{
+    height: 100% !important;
+}
+
 @media screen and (max-width: 700px) {
  .chart__menu>div{
     width: 60%;
