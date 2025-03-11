@@ -57,7 +57,7 @@ watch(
 
 watch(
     () => curveStore.toggleKey,
-    () => {        
+    () => {
         toggleLine();
     },
     { deep: true, flush: "post" }
@@ -66,9 +66,9 @@ watch(
 function adjustFontSize() {
     if (window.innerWidth < 400) {
         return defaultFontSize * 0.6;
-    }else if (window.innerWidth < 600) {
+    } else if (window.innerWidth < 600) {
         return defaultFontSize * 0.7;
-    }  else if (window.innerWidth < 700) {
+    } else if (window.innerWidth < 700) {
         return defaultFontSize * 0.8;
     } else {
         return defaultFontSize;
@@ -109,6 +109,7 @@ function updateChartCurve() {
         createChart();
         return;
     }
+    
     myLineChart.value.options.scales.x.labels = [...curveStore.filteredLabelX];
     myLineChart.value.data.datasets.forEach((dataset, index) => {
         dataset.data = curveStore.filteredData[index] || [];
@@ -134,6 +135,7 @@ function addNewLine(labelName, data, color) {
         pointHoverRadius: 7,
         fill: isFilled.value ? "start" : false,
     };
+
 
     myLineChart.value.data.datasets.push(newDataset);
 
@@ -173,9 +175,9 @@ function createChart() {
         myLineChart.value = null;
     }
 
-     // Determine if y-axis title should be displayed based on device width
-     const displayYTitle = window.innerWidth >= 700;
-    
+    // Determine if y-axis title should be displayed based on device width
+    const displayYTitle = window.innerWidth >= 700;
+
     myLineChart.value = new Chart(ctx, {
         type: "line",
         data: {
@@ -201,7 +203,7 @@ function createChart() {
             scales: {
                 x: {
                     type: "category",
-                    labels: curveStore.filteredLabelX, 
+                    labels: curveStore.filteredLabelX,
                     ticks: {
                         font: {
                             size: adjustFontSize(),
@@ -237,7 +239,7 @@ function handleFillOption() {
     if (!myLineChart.value) return;
 
     myLineChart.value.data.datasets.forEach(dataset => {
-        dataset.fill = isFilled.value ? false: "start" ;
+        dataset.fill = isFilled.value ? false : "start";
     });
 
     isFilled.value = !isFilled.value
@@ -273,25 +275,24 @@ function hexToRGBA(hex, alpha = 0.5) {
             <div v-show="curveStore.selectedCurve !== 'TBILL'">
                 <button class="chart__menu_filterBut" :class="{ activeBut: curveStore.filter === ',' }"
                     @click="curveStore.setFilter(',')">
-                    {{ curveStore.language === "arm" ? 'Բոլորը' :'All'}}
+                    {{ curveStore.language === "arm" ? 'Բոլորը' : 'All' }}
                 </button>
                 <button class="chart__menu_filterBut" :class="{ activeBut: curveStore.filter === ',1' }"
                     @click="curveStore.setFilter(',1')">
-                    0-1 {{ curveStore.language === "arm" ? 'տարիները' :'years'}}
+                    0-1 {{ curveStore.language === "arm" ? 'տարիները' : 'years' }}
                 </button>
                 <button class="chart__menu_filterBut" :class="{ activeBut: curveStore.filter === '2,5' }"
                     @click="curveStore.setFilter('2,5')">
-                    2-5 {{ curveStore.language === "arm" ? 'տարիները' :'years'}}
+                    2-5 {{ curveStore.language === "arm" ? 'տարիները' : 'years' }}
                 </button>
                 <button class="chart__menu_filterBut" :class="{ activeBut: curveStore.filter === '7,' }"
                     @click="curveStore.setFilter('7,')">
-                    7-30 {{ curveStore.language === "arm" ? 'տարիները' :'years'}}
+                    7-30 {{ curveStore.language === "arm" ? 'տարիները' : 'years' }}
                 </button>
             </div>
-                <button class="chart__menu_filterBut" :class="{ activeBut: isFilled }"
-                    @click="handleFillOption()">
-                    {{ curveStore.language === "arm" ? 'Լրացնել գծերը' :'Fill lines'}}
-                </button>
+            <button class="chart__menu_filterBut" :class="{ activeBut: isFilled }" @click="handleFillOption()">
+                {{ curveStore.language === "arm" ? 'Լրացնել գծերը' : 'Fill lines' }}
+            </button>
         </div>
         <canvas ref="chartCanvas" width="800" height="600"></canvas>
     </div>
@@ -342,14 +343,14 @@ function hexToRGBA(hex, alpha = 0.5) {
     border: 1px solid green;
 }
 
-canvas{
+canvas {
     height: 100% !important;
 }
 
 @media screen and (max-width: 700px) {
- .chart__menu>div{
-    width: 60%;
-    flex-wrap: wrap
- }
+    .chart__menu>div {
+        width: 60%;
+        flex-wrap: wrap
+    }
 }
 </style>

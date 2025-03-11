@@ -87,7 +87,6 @@ export const useCurveStore = defineStore("curveStore", () => {
     } else {
       selectedDays.value.add(dates[0]);
       labelsX.value = resData[0].margins;
-      allData.value.push(resData[0].values);
       sliceEnd = labelsX.length;
 
       filteredLabelX.value =
@@ -100,6 +99,7 @@ export const useCurveStore = defineStore("curveStore", () => {
             })
           : labelsX.value;
 
+      allData.value.push(resData[0].values);
       filteredData.value = [
         ...allData.value.map((line) => {
           return line.slice(sliceStart, sliceEnd);
@@ -117,10 +117,27 @@ export const useCurveStore = defineStore("curveStore", () => {
     ];
 
     if (selectedCurve.value === "TBILL") {
-      filteredLabelX.value = labelsX.value;
+      filteredLabelX.value =
+        language.value == "arm"
+          ? labelsX.value.map((el) => {
+              return el
+                .replace(/\bday\b/g, "օր")
+                .replace(/\bmonth\b/g, "ամիս")
+                .replace(/\byear\b/g, "տարի");
+            })
+          : labelsX.value;
       filteredData.value = allData.value;
     } else {
-      filteredLabelX.value = labelsX.value.slice(sliceStart, sliceEnd);
+      const slicedLabelX = labelsX.value.slice(sliceStart, sliceEnd);
+      filteredLabelX.value =
+        language.value == "arm"
+          ? slicedLabelX.map((el) => {
+              return el
+                .replace(/\bday\b/g, "օր")
+                .replace(/\bmonth\b/g, "ամիս")
+                .replace(/\byear\b/g, "տարի");
+            })
+          : slicedLabelX;
       filteredData.value = [
         ...allData.value.map((line) => {
           return line.slice(sliceStart, sliceEnd);
