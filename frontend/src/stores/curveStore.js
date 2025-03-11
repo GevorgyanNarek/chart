@@ -16,7 +16,7 @@ export const useCurveStore = defineStore("curveStore", () => {
   const toggleLineIndex = ref(-1);
   const lineColors = ref(["#F2B518"]);
   const language = ref("en");
-  const errorMsg = ref("")
+  const errorMsg = ref("");
 
   let sliceStart = 0;
   let sliceEnd = 0;
@@ -43,8 +43,6 @@ export const useCurveStore = defineStore("curveStore", () => {
   };
 
   const getLabels = computed(() => {
-    console.log(labelsX.value);
-    
     return language.value == "arm"
       ? labelsX.value.map((el) => {
           return el
@@ -62,7 +60,6 @@ export const useCurveStore = defineStore("curveStore", () => {
     }
 
     const requestDates = [...dates];
-    console.log("fetching...", requestDates, selectedCurve.value);
 
     try {
       const response = await Axios.post(
@@ -73,10 +70,7 @@ export const useCurveStore = defineStore("curveStore", () => {
         }
       );
 
-      console.log(response.data);
       if (!dates || dates.length === 0) {
-        console.log(dates);
-
         dates = response.data.map((el) => {
           return format(parseISO(el.date), "yyyy/MM/dd");
         });
@@ -115,8 +109,6 @@ export const useCurveStore = defineStore("curveStore", () => {
   };
 
   const handleChangeCurve = (data) => {
-    console.log("change in fetch");
-
     labelsX.value = data[0].margins;
     allData.value = [
       ...data.map((el) => {
@@ -137,7 +129,6 @@ export const useCurveStore = defineStore("curveStore", () => {
     }
 
     chartDataReady.value = true;
-    // displayGridView();
   };
 
   const setFilter = (text) => {
@@ -150,7 +141,16 @@ export const useCurveStore = defineStore("curveStore", () => {
       ? labelsX.value.indexOf(filterSpace[1] + " year") + 1
       : labelsX.value.length;
 
-    filteredLabelX.value = labelsX.value.slice(sliceStart, sliceEnd);
+    const slicedLabelX = labelsX.value.slice(sliceStart, sliceEnd);
+    filteredLabelX.value =
+      language.value == "arm"
+        ? slicedLabelX.map((el) => {
+            return el
+              .replace(/\bday\b/g, "օր")
+              .replace(/\bmonth\b/g, "ամիս")
+              .replace(/\byear\b/g, "տարի");
+          })
+        : slicedLabelX;
     filteredData.value = [
       ...allData.value.map((line) => {
         return line.slice(sliceStart, sliceEnd);
@@ -203,7 +203,7 @@ export const useCurveStore = defineStore("curveStore", () => {
       if (response.status === 200 && response.data.values[length]) {
         handleNewDate(response.data, day);
       } else {
-        errorMsg.value = day
+        errorMsg.value = day;
       }
     } catch (err) {
       console.log(err);
@@ -479,6 +479,6 @@ export const useCurveStore = defineStore("curveStore", () => {
     downloadJSON,
     downloadCSV,
     downloadXML,
-    getLanguageFromParam
+    getLanguageFromParam,
   };
 });

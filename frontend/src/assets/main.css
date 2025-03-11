@@ -14,9 +14,3 @@
   font-family: Arm;
   src: url("fonts/NotoSansArmenian-Regular.ttf") format('truetype')
 } 
-
-
-html{
-  overflow-y: hidden;
-  height: 100%;
-}

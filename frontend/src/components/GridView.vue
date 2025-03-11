@@ -9,7 +9,8 @@ const curveStore = useCurveStore()
             <thead>
                 <tr>
                     <th>{{ curveStore.language === 'arm' ? "Ժամկետայնություն" : 'Maturity' }}</th>
-                    <th v-for="(day,index) in curveStore.getSelectedDays" :key="`gridDay${day}`" :style="{backgroundColor: curveStore.lineColors[index]}">{{ day }}</th>
+                    <th v-for="(day, index) in curveStore.getSelectedDays" :key="`gridDay${day}`"
+                        :style="{ backgroundColor: curveStore.lineColors[index] }">{{ day }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,8 +28,7 @@ const curveStore = useCurveStore()
 <style scoped>
 .gridView {
     width: 100%;
-    height: 100%;
-    /* padding: 3vh 0; */
+    height: 110%;
     overflow: auto;
 }
 
@@ -65,17 +65,28 @@ const curveStore = useCurveStore()
     text-align: center;
     padding: 0.4vh;
     border: 1px solid #EEE;
-    font-size: 2.2vh;
+    font-size: 2vh;
 }
 
 .gridView td:first-child {
     width: 13vw;
 }
 
-@media screen and (max-width: 600px) {
-.gridView td {
-    padding: 0.6vh;
-    font-size: 1.8vh;
+@media screen and (max-width: 750px) {
+    .gridView td {
+        padding: 0.6vh;
+        font-size: 1.8vh;
+    }
 }
+
+
+@media screen and (max-width: 600px) {
+    .gridView th{
+        font-size: 1.2vh;
+    }
+    .gridView td {
+        padding: 0.6vh;
+        font-size: 1.1vh;
+    }
 }
 </style>

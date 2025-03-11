@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import ChartView from "@/components/ChartView.vue";
 import GridView from "@/components/GridView.vue";
 import VCalendar from "@/components/VCalendar.vue";
@@ -8,6 +8,7 @@ import { useCurveStore } from "@/stores/curveStore";
 const curveStore = useCurveStore();
 const showChart = ref(true);
 const showCalendar = ref(false);
+const calendarRef = ref(null);
 const curveNames = [
   {
     eng: "YIELD",
@@ -64,6 +65,21 @@ function toggleVisibility(day) {
   curveStore.toggleLineInChart(day);
 }
 
+const handleClickOutside = (event) => {
+  if (calendarRef.value && !calendarRef.value.contains(event.target)) {
+    showCalendar.value = false;
+  }
+};
+
+onMounted(() => {
+  document.addEventListener("click", handleClickOutside);
+  curveStore.getLanguageFromParam();
+  curveStore.fetchData();
+});
+
+onUnmounted(() => {
+  document.removeEventListener("click", handleClickOutside);
+});
 
 onMounted(() => {
   curveStore.getLanguageFromParam()
@@ -80,18 +96,19 @@ onMounted(() => {
           <div class="header__date_item_color" :style="{ background: curveStore.lineColors[index] }"></div>
           <span>{{ day }}</span>
           <button class="header__date_item_visibleBut">
-            <img v-if="!visibilityState[day]" src="@/assets/icons/visibility.svg" alt=""
-              @click="toggleVisibility(day)">
+            <img v-if="!visibilityState[day]" src="@/assets/icons/visibility.svg" alt="" @click="toggleVisibility(day)">
             <img v-else src="@/assets/icons/visibility_off.svg" alt="" @click="toggleVisibility(day)">
           </button>
           <button class="header__date_item_closeBut">
             <img src="@/assets/icons/close.svg" alt="" @click="curveStore.removeDay(day)">
           </button>
         </div>
-        <div class="header__date_calendarBut">
-          <img src="@/assets/icons/calendar_add.svg" alt="" @click="toggleCalendar" />
+        <div ref="calendarRef">
+          <div class="header__date_calendarBut">
+            <img src="@/assets/icons/calendar_add.svg" alt="" @click="toggleCalendar" />
+          </div>
+          <VCalendar v-if="showCalendar" />
         </div>
-        <VCalendar v-if="showCalendar" />
       </div>
       <div class="header_menu">
         <div>
@@ -141,11 +158,11 @@ onMounted(() => {
 <style scoped>
 .board {
   width: 100%;
-  height: 100vh;
+  height: 1000px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
   position: relative;
 }
 
@@ -193,10 +210,10 @@ header {
   border-radius: 3px;
   position: relative;
   overflow: hidden;
+  font-size: 16px;
 }
 
 .header__date_item>span {
-  font-size: 16px;
   padding-left: 10px;
 }
 
@@ -312,7 +329,7 @@ footer {
 }
 
 footer h3 {
-  font-size: 23px;
+  font-size: 20px;
   color: #003299;
 }
 
@@ -324,7 +341,7 @@ footer h3 {
 }
 
 .footer__dowload span {
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .footer__dowload>button {
@@ -354,7 +371,19 @@ footer h3 {
     flex-direction: column;
     gap: 20px;
   }
+
+  main {
+    width: 98%;
+    height: 55%;
+  }
 }
+
+@media screen and (max-width: 750px) {
+  main {
+    height: 50%;
+  }
+}
+
 
 @media screen and (max-width: 700px) {
   .header__date_item {
@@ -376,7 +405,7 @@ footer h3 {
   }
 
   footer {
-    padding: 12vh 0 3vh;
+    padding: 85px 0 3vh;
   }
 
   footer h3 {
@@ -389,18 +418,17 @@ footer h3 {
 }
 
 @media screen and (max-width: 600px) {
+  .board {
+    width: 100%;
+  }
+
   .header__date_item {
     width: 200px;
     height: 35px;
   }
 
-  .header__date_item>span {
-    font-size: 16px;
-  }
-
   .header_menu_curveBut {
-    width: 33%;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 25px;
   }
 
@@ -420,20 +448,50 @@ footer h3 {
   }
 
   footer {
-    padding: 16vh 0 3vh;
+    padding: 110px 0 3vh;
   }
 
-  .header_menu_toggleBut{
+  main {
+    height: 45%;
+  }
+
+  .header__date_item {
+    width: 170px;
+    font-size: 14px;
+    height: 32px;
+  }
+
+  .header__date_item>button {
+    top: 5px;
+  }
+
+  .header_menu_toggleBut {
     height: 30px;
     padding: 0 15px;
     border-radius: 5px;
     border-width: 2px;
   }
+
+  .header__date_calendarBut {
+    height: 32px;
+  }
 }
 
-@media screen and (max-width: 400px) {
-  footer {
-    padding: 18vh 0 3vh;
+@media screen and (max-width: 380px) {
+  .header__date_item {
+    width: 150px;
+  }
+
+  .header__date_item>span {
+    font-size: 12px;
+  }
+
+  .footer__dowload span {
+    font-size: 12px;
+  }
+
+  .footer__dowload>button {
+    font-size: 14px;
   }
 }
 </style>

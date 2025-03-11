@@ -19,7 +19,6 @@ const weekDays = computed(() => {
         format(new Date(2022, 0, i + 3), 'eee', { locale: curveStore.language === "arm" ? hy : enUS }).toUpperCase()
     );
 });
-console.log(curveStore.language);
 
 const months = Array.from({ length: 12 }, (_, i) =>
     format(new Date(0, i), 'MMM', { locale: curveStore.language === "arm" ? hy : enUS })

@@ -7,13 +7,12 @@ const curveStore = useCurveStore();
 const chartCanvas = ref(null);
 const myLineChart = shallowRef(null);
 const isFilled = shallowRef(false)
-const defaultFontSize = 13;
+const defaultFontSize = 14;
 
 watch(
     () => curveStore.chartDataReady,
     (newValue) => {
         if (newValue) {
-            console.log("Curve changed, updating chart...");
             updateChartCurve();
         }
     },
@@ -23,7 +22,6 @@ watch(
 watch(
     () => curveStore.filter,
     () => {
-        console.log("Filter changed, updating chart labels...");
         updateChartLabel();
     }
 );
@@ -32,7 +30,6 @@ watch(
     () => curveStore.allData,
     (newValue) => {
         if (newValue) {
-            console.log("Creating chart...");
             createChart();
         }
     },
@@ -44,8 +41,6 @@ watch(
     () => curveStore.newLineData,
     (newData) => {
         if (newData) {
-            console.log("New line data detected, updating chart...");
-
             addNewLine(newData.label, newData.data, newData.color);
         }
     },
@@ -55,7 +50,6 @@ watch(
 watch(
     () => curveStore.removeKey,
     () => {
-        console.log("Remove action detected, updating chart...");
         removeLine();
     },
     { deep: true, flush: "post" }
@@ -63,9 +57,7 @@ watch(
 
 watch(
     () => curveStore.toggleKey,
-    () => {
-        console.log("Toggle action detected, updating chart...");
-        
+    () => {        
         toggleLine();
     },
     { deep: true, flush: "post" }
@@ -109,7 +101,6 @@ function updateChartLabel() {
     myLineChart.value.options.scales.y.suggestedMax = getMaxValue(...curveStore.filteredData);
 
     myLineChart.value.update();
-    console.log("Chart labels and data updated successfully.");
 }
 
 // Update the chart with new data (curve changed)
@@ -118,7 +109,6 @@ function updateChartCurve() {
         createChart();
         return;
     }
-    console.log("Updating chart based curve...");
     myLineChart.value.options.scales.x.labels = [...curveStore.filteredLabelX];
     myLineChart.value.data.datasets.forEach((dataset, index) => {
         dataset.data = curveStore.filteredData[index] || [];
@@ -133,7 +123,6 @@ function updateChartCurve() {
 // Add new date (line)
 function addNewLine(labelName, data, color) {
     if (!myLineChart.value) return;
-    console.log(labelName, data, color);
 
     const newDataset = {
         label: labelName,
