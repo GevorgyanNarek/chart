@@ -154,8 +154,8 @@ app.post("/somedata", async (req, res) => {
 
 // POST /alldata
 app.post("/alldata", async (req, res) => {
-  const { curve } = req.query;
-
+  const { curve } = req.body;
+  
   const curveMap = {
     SPOT: "SPOT",
     TBILL: "TBILLRATE",
@@ -200,7 +200,7 @@ app.post("/alldata", async (req, res) => {
 
 // GET /currentdata
 app.post("/currentdata", async (req, res) => {
-  const currentYear = new Date().getFullYear() - 1;
+  const currentYear = new Date().getFullYear();
 
   const { curve } = req.body;
   let curveName = "";

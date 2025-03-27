@@ -293,7 +293,7 @@ header {
 
 .header_menu_toggleBut {
   width: fit-content;
-  height: 35px;
+  min-height: 35px;
   padding: 0 20px;
   background-color: rgb(255, 174, 0);
   border: 3px solid rgb(255, 174, 0);

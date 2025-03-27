@@ -2,32 +2,37 @@ import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import Axios from "axios";
 import { parse, format, parseISO } from "date-fns";
-import { enUS } from "date-fns/locale";
-import { hy } from "date-fns/locale";
+import { enUS, hy } from "date-fns/locale";
 
 export const useCurveStore = defineStore("curveStore", () => {
-  // State
+  // Configuration Constants
+  const MAX_SELECTED_DAYS = 5;
+  const DEFAULT_LANGUAGE = "en";
+  const BASE_API_URL = import.meta.env.VITE_API_URL;
+
+
+
   const chartDataReady = ref(false);
   const filter = ref(",");
-  const newLineData = ref({});
+  const newLineData = ref(null);
   const removedLineIndex = ref(-1);
-  const toggleKey = ref(0);
   const removeKey = ref(0);
   const toggleLineIndex = ref(-1);
+  const toggleKey = ref(0);
   const lineColors = ref(["#F2B518"]);
-  const language = ref("en");
+  const language = ref(DEFAULT_LANGUAGE);
   const errorMsg = ref("");
+  const selectedCurve = ref("YIELD");
+  const selectedDays = ref(new Set()); // Stores active chart lines
+  const allData = ref([]); // Stores all data
+  const filteredData = ref([]); // Stores filtered/manipulated data for rendering
+  const labelsX = ref([]);
+  const filteredLabelX = ref([]);
 
   let sliceStart = 0;
   let sliceEnd = 0;
   let colors = ["#0E4A2D", "#003299", "#b25b2e", "#971f8f", "#B9BEBE"];
 
-  const labelsX = ref([]);
-  const filteredLabelX = ref([]);
-  const selectedCurve = ref("YIELD");
-  const selectedDays = ref(new Set()); // Stores active chart lines
-  const allData = ref([]); // Stores all data
-  const filteredData = ref([]); // Stores filtered/manipulated data for rendering
 
   // Computed property to convert selectedDays to an array
   const getSelectedDays = computed(() => {
@@ -63,7 +68,7 @@ export const useCurveStore = defineStore("curveStore", () => {
 
     try {
       const response = await Axios.post(
-        `${import.meta.env.VITE_API_URL}/somedata`,
+        `${BASE_API_URL}/somedata`,
         {
           curve: selectedCurve.value,
           dates: requestDates,
@@ -201,7 +206,7 @@ export const useCurveStore = defineStore("curveStore", () => {
 
     if (getSelectedDays.value.includes(currentDay)) {
       removeDay(currentDay);
-    } else if (selectedDays.value.size < 5) {
+    } else if (selectedDays.value.size < MAX_SELECTED_DAYS) {
       const formattedDate = formatDate(currentDay);
       fetchNewDate(formattedDate);
     }
@@ -210,7 +215,7 @@ export const useCurveStore = defineStore("curveStore", () => {
   const fetchNewDate = async (day) => {
     try {
       let response = await Axios.post(
-        `${import.meta.env.VITE_API_URL}/singledata`,
+        `${BASE_API_URL}/singledata`,
         {
           curve: selectedCurve.value,
           date: day,
@@ -287,7 +292,7 @@ export const useCurveStore = defineStore("curveStore", () => {
       case "currentYear":
         try {
           let response = await Axios.post(
-            `${import.meta.env.VITE_API_URL}/currentdata`,
+            `${BASE_API_URL}/currentdata`,
             {
               curve: selectedCurve.value,
             }
@@ -303,7 +308,7 @@ export const useCurveStore = defineStore("curveStore", () => {
       case "all":
         try {
           let response = await Axios.post(
-            `${import.meta.env.VITE_API_URL}/alldata`,
+            `${BASE_API_URL}/alldata`,
             {
               curve: selectedCurve.value,
             }
