@@ -120,7 +120,6 @@ app.post("/somedata", async (req, res) => {
       }
       dates = [latestDateRow.latestDate]; // Use the latest date as the only value in dates array
     }
-    console.log(dates);
     logger.info(`last date is ${dates}`);
     
     const results = await Promise.all(
@@ -153,8 +152,8 @@ app.post("/somedata", async (req, res) => {
   }
 });
 
-// GET /alldata
-app.get("/alldata", async (req, res) => {
+// POST /alldata
+app.post("/alldata", async (req, res) => {
   const { curve } = req.query;
 
   const curveMap = {
@@ -176,8 +175,6 @@ app.get("/alldata", async (req, res) => {
     const rows = await conn.query(query);
     conn.release();
 
-    console.log(rows);
-
     // Group rows by date, constructing an object for each date
     const grouped = rows.reduce((acc, { date, maturity, value }) => {
       if (value === null) return acc;
@@ -187,24 +184,6 @@ app.get("/alldata", async (req, res) => {
       acc[date][maturity] = value;
       return acc;
     }, {});
-
-    // Function to dynamically sort keys in each object
-    // const reorderObjectKeysDynamically = (obj) => {
-    //   // Get all keys except 'date'
-    //   const maturityKeys = Object.keys(obj).filter((key) => key !== "date");
-    //   // Sort using parseName helper. Note that parseName returns [numericValue, unit]
-    //   maturityKeys.sort((a, b) => {
-    //     const [aValue] = parseName(a);
-    //     const [bValue] = parseName(b);
-    //     return aValue - bValue;
-    //   });
-    //   // Build new object: date comes first, then sorted maturity keys
-    //   const orderedObj = { date: obj.date };
-    //   maturityKeys.forEach((key) => {
-    //     orderedObj[key] = obj[key];
-    //   });
-    //   return orderedObj;
-    // };
 
     // Reorder keys for each grouped object
     const result = Object.values(grouped).map((item) =>
@@ -257,27 +236,11 @@ app.post("/currentdata", async (req, res) => {
       return acc;
     }, {});
 
-    // Function to dynamically sort keys in each object
-    const reorderObjectKeysDynamically = (obj) => {
-      // Get all keys except 'date'
-      const maturityKeys = Object.keys(obj).filter((key) => key !== "date");
-      // Sort using parseName helper. Note that parseName returns [numericValue, unit]
-      maturityKeys.sort((a, b) => {
-        const [aValue] = parseName(a);
-        const [bValue] = parseName(b);
-        return aValue - bValue;
-      });
-      // Build new object: date comes first, then sorted maturity keys
-      const orderedObj = { date: obj.date };
-      maturityKeys.forEach((key) => {
-        orderedObj[key] = obj[key];
-      });
-      return orderedObj;
-    };
-
     // Reorder keys for each grouped object
     const result = Object.values(grouped).map((item) =>
-      reorderObjectKeysDynamically(item)
+      Object.fromEntries(
+        Object.entries(item).sort((a, b) => parseName(a[0])[0] - parseName(b[0])[0])
+      )
     );
 
     res.json(result);
@@ -303,4 +266,3 @@ app.listen(port, () => {
   logger.info(`Application started at ${port} port`);
   console.log(`Server listening at http://localhost:${port}`);
 });
-
