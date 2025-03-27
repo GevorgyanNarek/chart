@@ -353,4 +353,12 @@ canvas {
         flex-wrap: wrap
     }
 }
+
+@media screen and (max-width: 380px) {
+    .chart__menu_filterBut{
+        font-size: 13px;
+}
+}
+
+
 </style>

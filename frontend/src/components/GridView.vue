@@ -43,7 +43,7 @@ const curveStore = useCurveStore()
 
 .gridView thead {
     position: sticky;
-    top: 0;
+    top: -1px;
 }
 
 .gridView thead tr {
@@ -87,6 +87,13 @@ const curveStore = useCurveStore()
     .gridView td {
         padding: 0.6vh;
         font-size: 1.1vh;
+    }
+}
+
+@media screen and (max-width: 470px) {
+    .gridView{
+        height: 130%;
+        margin-top: 90px;
     }
 }
 </style>

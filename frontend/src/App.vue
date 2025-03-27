@@ -11,16 +11,16 @@ const showCalendar = ref(false);
 const calendarRef = ref(null);
 const curveNames = [
   {
-    eng: "YIELD",
-    arm: "Մինչև մարում"
+    eng: "YIELD TO MATURITY",
+    arm: "Մինչև մարում եկամտաբերություն"
   },
   {
     eng: "SPOT",
-    arm: "Սպոտ"
+    arm: "Սփոթ եկամտաբերություն"
   },
   {
     eng: "TBILL",
-    arm: "Զեղչատոկոսային պարտատոմսեր"
+    arm: "Զեղչատոկոսային պարտատոմսերի եկամտաբերություն"
   }
 ]
 const visibilityState = ref({}); // Local state to track visibility for each day
@@ -113,7 +113,7 @@ onMounted(() => {
       <div class="header_menu">
         <div>
           <button v-for="name in curveNames" :key="`curve${name}`" class="header_menu_curveBut"
-            :class="{ activeCurveBut: curveStore.selectedCurve === name.eng }"
+            :class="{ activeCurveBut: curveStore.selectedCurve === name.eng.split(' ')[0] }"
             @click="curveStore.changeSelectedCurve(name.eng)">
             {{ curveStore.language === 'arm' ? name.arm : name.eng }}
           </button>
@@ -424,7 +424,11 @@ footer h3 {
 
   .header__date_item {
     width: 200px;
-    height: 35px;
+    height: 32px;
+  }
+
+  .header__date_calendarBut {
+    height: 32px;
   }
 
   .header_menu_curveBut {
@@ -437,18 +441,44 @@ footer h3 {
   }
 
   .header__date_item>button {
-    top: 7px;
+    top: 5px;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .header_menu>div {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .header_menu_curveBut {
+    text-align: left;
+    font-size: 15px;
+    line-height: 17px;
+    padding: 0;
+  }
+
+  .header_menu_curveBut {
+    border-left: none;
   }
 }
 
 @media screen and (max-width: 450px) {
-  .header_menu_curveBut {
-    width: 27%;
+  footer {
+    padding: 110px 0 3vh;
+  }
+
+  footer h3 {
+    font-size: 17px;
+  }
+
+  .footer__dowload span {
     font-size: 14px;
   }
 
-  footer {
-    padding: 110px 0 3vh;
+  .footer__dowload>button {
+    font-size: 15px;
   }
 
   main {
@@ -458,11 +488,14 @@ footer h3 {
   .header__date_item {
     width: 170px;
     font-size: 14px;
-    height: 32px;
   }
 
   .header__date_item>button {
     top: 5px;
+  }
+
+  .header_menu_curveBut {
+    font-size: 14px;
   }
 
   .header_menu_toggleBut {
@@ -470,10 +503,6 @@ footer h3 {
     padding: 0 15px;
     border-radius: 5px;
     border-width: 2px;
-  }
-
-  .header__date_calendarBut {
-    height: 32px;
   }
 }
 
@@ -484,6 +513,10 @@ footer h3 {
 
   .header__date_item>span {
     font-size: 12px;
+  }
+
+  footer {
+    padding: 130px 0 3vh;
   }
 
   .footer__dowload span {

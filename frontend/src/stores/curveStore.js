@@ -190,7 +190,7 @@ export const useCurveStore = defineStore("curveStore", () => {
   };
 
   const changeSelectedCurve = async (curveName) => {
-    selectedCurve.value = curveName;
+    selectedCurve.value = curveName.split(" ")[0];
     chartDataReady.value = false;
     const dates = Array.from(selectedDays.value);
     await fetchData(dates);
