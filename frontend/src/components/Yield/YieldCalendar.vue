@@ -48,8 +48,8 @@ const getCellClass = (day, index) => {
     }
 
     if (yieldStore.selectedDays.has(
-        `${selectedYear.value}/${selectedMonth.value}/${day < 10 ? "0" + day : day}`
-    )) {
+        `${selectedYear.value}/${selectedMonth.value < 10 ? "0" + selectedMonth.value : selectedMonth.value}/${day < 10 ? "0" + day : day}`
+    )) { 
         return 'cell--active'
     }
 
@@ -201,7 +201,7 @@ onMounted(updateCalendar);
     object-fit: contain;
 }
 
-.calendar__message{
+.calendar__message {
     width: 100%;
     padding: 5px;
     font-size: 14px;

@@ -78,6 +78,8 @@ export const useIndexStore = defineStore("indexStore", () => {
   const setDateRange = (input) => {
     const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
     const [start, end] = input.split(" - ");
+    console.log(input);
+    
 
     // Validate format first
     if (!dateRegex.test(start) || !dateRegex.test(end)) {

@@ -26,7 +26,6 @@ app.use(morgan(process.env.LOG_FORMAT || "combined", { stream: logStream }));
 // Routes
 app.use("/api/index-data", require("./routes/indexData"));
 app.use("/api/yield-data", require("./routes/yieldData"));
-// app.use(...) ← You can modularize all other routes similarly
 
 // Start
 app.listen(port, () => {

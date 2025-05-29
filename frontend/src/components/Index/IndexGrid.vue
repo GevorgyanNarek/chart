@@ -68,7 +68,7 @@ const indexNames = [
     position: relative;
 }
 
-.gridView thead {
+.gridView123 thead {
     position: sticky;
     top: -2px;
 }

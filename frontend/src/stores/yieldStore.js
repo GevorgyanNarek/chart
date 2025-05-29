@@ -58,6 +58,7 @@ export const useYieldStore = defineStore("yieldStore", () => {
     if (!Array.isArray(dates)) {
       return;
     }
+    console.log(dates);
 
     const requestDates = [...dates];
 
@@ -75,6 +76,8 @@ export const useYieldStore = defineStore("yieldStore", () => {
           return format(parseISO(el.date), "yyyy/MM/dd");
         });
       }
+      console.log(dates);
+
       handleDataLoad(response.data, dates);
     } catch (err) {
       console.error("Error fetching data:", err);
@@ -198,7 +201,8 @@ export const useYieldStore = defineStore("yieldStore", () => {
 
   const toggleDay = async (day, month, year) => {
     const currentDay = `${day < 10 ? "0" + day : day} ${month} ${year}`;
-
+    console.log(currentDay);
+    
     if (getSelectedDays.value.includes(currentDay)) {
       removeDay(currentDay);
     } else if (selectedDays.value.size < 5) {

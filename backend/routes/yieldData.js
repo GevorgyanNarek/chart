@@ -35,7 +35,7 @@ router.post("/by-date", async (req, res) => {
       SELECT ${curveName}, CName
       FROM v_sec_interestrate
       JOIN v_sec_period ON v_sec_interestrate.SEC_PERIOD = v_sec_period.REFID
-      WHERE CALCDATE = ?`;
+      WHERE PRICEDATE = ?`;
     const rows = await conn.query(query, [date]);
 
     const filtered = rows
@@ -68,7 +68,7 @@ router.post("/by-dates", async (req, res) => {
     conn = await pool.getConnection();
     if (!dates.length) {
       const [latest] = await conn.query(
-        "SELECT MAX(CALCDATE) AS latestDate FROM v_sec_interestrate"
+        "SELECT MAX(PRICEDATE) AS latestDate FROM v_sec_interestrate"
       );
       if (!latest?.latestDate)
         return res.status(404).json({ error: "No data found" });
@@ -81,7 +81,7 @@ router.post("/by-dates", async (req, res) => {
           `SELECT ${curveName}, CName
            FROM v_sec_interestrate
            JOIN v_sec_period ON v_sec_interestrate.SEC_PERIOD = v_sec_period.REFID
-           WHERE CALCDATE = ?`,
+           WHERE PRICEDATE = ?`,
           [date]
         )
       )
@@ -120,7 +120,7 @@ router.post("/all", async (req, res) => {
     conn = await pool.getConnection();
     const query = `
       SELECT ${curveName} AS value, 
-             TO_CHAR(CALCDATE, 'yyyy/mm/dd') AS date,
+             TO_CHAR(PRICEDATE, 'yyyy/mm/dd') AS date,
              CName AS maturity
       FROM v_sec_interestrate
       JOIN v_sec_period ON v_sec_interestrate.SEC_PERIOD = v_sec_period.REFID`;
@@ -167,11 +167,11 @@ router.post("/current-year", async (req, res) => {
     conn = await pool.getConnection();
     const query = `
       SELECT ${curveName} AS value,
-             TO_CHAR(CALCDATE, 'yyyy/mm/dd') AS date,
+             TO_CHAR(PRICEDATE, 'yyyy/mm/dd') AS date,
              CName AS maturity
       FROM v_sec_interestrate
       JOIN v_sec_period ON v_sec_interestrate.SEC_PERIOD = v_sec_period.REFID
-      WHERE YEAR(CALCDATE) = ?`;
+      WHERE YEAR(PRICEDATE) = ?`;
 
     const rows = await conn.query(query, [currentYear]);
 

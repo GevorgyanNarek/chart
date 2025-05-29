@@ -351,10 +351,6 @@ footer h3 {
 }
 
 @media screen and (max-width: 380px) {
-    .header__date_item {
-        width: 150px;
-    }
-
     .header__date_item>span {
         font-size: 12px;
     }
