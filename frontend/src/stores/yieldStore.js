@@ -58,7 +58,6 @@ export const useYieldStore = defineStore("yieldStore", () => {
     if (!Array.isArray(dates)) {
       return;
     }
-    console.log(dates);
 
     const requestDates = [...dates];
 
@@ -69,14 +68,13 @@ export const useYieldStore = defineStore("yieldStore", () => {
           curve: selectedCurve.value,
           dates: requestDates,
         }
-      );
+      );      
 
       if (!dates || dates.length === 0) {
         dates = response.data.map((el) => {
           return format(parseISO(el.date), "yyyy/MM/dd");
         });
       }
-      console.log(dates);
 
       handleDataLoad(response.data, dates);
     } catch (err) {
@@ -201,7 +199,6 @@ export const useYieldStore = defineStore("yieldStore", () => {
 
   const toggleDay = async (day, month, year) => {
     const currentDay = `${day < 10 ? "0" + day : day} ${month} ${year}`;
-    console.log(currentDay);
     
     if (getSelectedDays.value.includes(currentDay)) {
       removeDay(currentDay);

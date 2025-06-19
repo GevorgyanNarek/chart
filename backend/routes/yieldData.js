@@ -42,8 +42,6 @@ router.post("/by-date", async (req, res) => {
       .filter((r) => r[curveName] !== null)
       .sort((a, b) => parseName(a.CName)[0] - parseName(b.CName)[0]);
 
-    console.log(filtered);
-
     res.json({
       date,
       values: filtered.map((r) => r[curveName]),
@@ -87,19 +85,16 @@ router.post("/by-dates", async (req, res) => {
       )
     );
 
-    const response = results
-      .map((rows, i) => {
-        const filtered = rows
-          .filter((r) => r[curveName] !== null)
-          .sort((a, b) => parseName(a.CName)[0] - parseName(b.CName)[0]);
-        return {
-          date: dates[i],
-          values: filtered.map((r) => r[curveName]),
-          margins: filtered.map((r) => r.CName),
-        };
-      })
-      .sort((a, b) => new Date(a.date) - new Date(b.date));
-    console.log(response);
+    const response = results.map((rows, i) => {
+      const filtered = rows
+        .filter((r) => r[curveName] !== null)
+        .sort((a, b) => parseName(a.CName)[0] - parseName(b.CName)[0]);
+      return {
+        date: dates[i],
+        values: filtered.map((r) => r[curveName]),
+        margins: filtered.map((r) => r.CName),
+      };
+    });
 
     res.json(response);
   } catch (err) {
